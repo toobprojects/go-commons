@@ -95,6 +95,8 @@ func NotEqualsIgnoreCase(textArg string, anotherTextArg string) bool {
 	return !EqualsIgnoreCase(textArg, anotherTextArg)
 }
 
+// Trim
+// Pretty much like the Java Trip
 func Trim(textValue string) string {
 	return strings.TrimSpace(textValue)
 }
