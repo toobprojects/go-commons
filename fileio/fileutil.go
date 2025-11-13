@@ -2,10 +2,11 @@ package fileio
 
 import (
 	"fmt"
-	"github.com/toobprojects/go-commons/logs"
 	"io"
 	"os"
 	"path/filepath"
+
+	"github.com/toobprojects/go-commons/logs"
 )
 
 // ReadContent
@@ -24,7 +25,7 @@ func ReadContent(pathArg string) string {
 }
 
 // Exists
-// Checks if a given file Exists on the file system
+// Checks if a given file Exists on the file
 func Exists(path string) (bool, error) {
 	_, err := os.Stat(path)
 	if err == nil {
