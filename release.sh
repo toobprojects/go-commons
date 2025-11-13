@@ -60,16 +60,16 @@ bump_version() {
 
   case "$bump_type" in
     major)
-      ((MAJOR++))
+      MAJOR=$((MAJOR + 1))
       MINOR=0
       PATCH=0
       ;;
     minor)
-      ((MINOR++))
+      MINOR=$((MINOR + 1))
       PATCH=0
       ;;
     patch)
-      ((PATCH++))
+      PATCH=$((PATCH + 1))
       ;;
     *)
       log_error "Unknown bump type: $bump_type"
