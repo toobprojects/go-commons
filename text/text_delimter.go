@@ -1,9 +1,7 @@
 package text
 
 import (
-	"bytes"
 	"strings"
-	"unicode"
 )
 
 const (
@@ -19,62 +17,43 @@ const (
 	COLON              = ":"
 )
 
-// StringBlank
-// Strempty checks whether string contains only whitespace or not
+// StringBlank reports whether the string contains only whitespace characters.
+// It treats an empty string as blank.
 func StringBlank(s string) bool {
-	if len(s) == 0 {
-		return true
-	}
-
-	r := []rune(s)
-	l := len(r)
-
-	for l > 0 {
-		l--
-		if !unicode.IsSpace(r[l]) {
-			return false
-		}
-	}
-
-	return true
+	return len(strings.TrimSpace(s)) == 0
 }
 
-// StringNotBlank
-// Used to negate the IsBankLogic
+// StringNotBlank is the negation of StringBlank.
 func StringNotBlank(s string) bool {
 	return !StringBlank(s)
 }
 
-// ListContains
-// Used to check if the String Slice contains a specific set of characters
+// ListContains reports whether any element in the slice contains arg as a substring.
 func ListContains(arguments []string, arg string) bool {
-	var contains bool
 	for _, argItem := range arguments {
 		if strings.Contains(argItem, arg) {
-			contains = true
+			return true
 		}
 	}
-
-	return contains
+	return false
 }
 
-// GetArg
-// Used to get a CLI flag arg by supplying the collection of args and stating which flag value you want.
+// GetArg returns the value for a flag of the form key=value.
+// It scans the slice and returns the first matching value where the element
+// starts with arg + "=". If no such element exists, it returns EMPTY.
 func GetArg(arguments []string, arg string) string {
-	var responseArg string
+	prefix := arg + "="
 	for _, argItem := range arguments {
-		if strings.Contains(argItem, arg) {
-			responseArg = strings.Split(argItem, "=")[1]
+		if strings.HasPrefix(argItem, prefix) {
+			return strings.TrimPrefix(argItem, prefix)
 		}
 	}
-
-	return responseArg
+	return EMPTY
 }
 
-// EqualsIgnoreCase
-// Used to compare two strings while ignoring the case of the text.
+// EqualsIgnoreCase compares two strings for equality, ignoring case.
 func EqualsIgnoreCase(textArg string, anotherTextArg string) bool {
-	return bytes.EqualFold([]byte(textArg), []byte(anotherTextArg))
+	return strings.EqualFold(textArg, anotherTextArg)
 }
 
 // Equals
@@ -83,20 +62,17 @@ func Equals(textArg string, anotherTextArg string) bool {
 	return textArg == anotherTextArg
 }
 
-// NotEquals
-// Negates the NotEquals
+// NotEquals reports whether two strings are not equal (case sensitive).
 func NotEquals(textArg string, anotherTextArg string) bool {
-	return !Equals(textArg, anotherTextArg)
+	return textArg != anotherTextArg
 }
 
-// Equals
-// Negates the EqualsIgnoreCase
+// NotEqualsIgnoreCase reports whether two strings are not equal, ignoring case.
 func NotEqualsIgnoreCase(textArg string, anotherTextArg string) bool {
 	return !EqualsIgnoreCase(textArg, anotherTextArg)
 }
 
-// Trim
-// Pretty much like the Java Trip
+// Trim returns textValue with all leading and trailing white space removed.
 func Trim(textValue string) string {
 	return strings.TrimSpace(textValue)
 }
