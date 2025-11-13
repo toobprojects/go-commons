@@ -4,19 +4,6 @@ import (
 	"strings"
 )
 
-const (
-	CHAR_COLON         = ":"
-	CHAR_TILDE         = "~"
-	CHAR_FORWARD_SLASH = "/"
-	CHAR_BACK_SLASH    = "\\"
-	CHAR_FULL_STOP     = "."
-	CHAR_ASTERIX       = "*"
-	HOME_DIR_SHORTHAND = CHAR_TILDE + CHAR_FORWARD_SLASH
-	EMPTY              = ""
-	WHITE_SPACE        = " "
-	COLON              = ":"
-)
-
 // StringBlank reports whether the string contains only whitespace characters.
 // It treats an empty string as blank.
 func StringBlank(s string) bool {
@@ -48,7 +35,7 @@ func GetArg(arguments []string, arg string) string {
 			return strings.TrimPrefix(argItem, prefix)
 		}
 	}
-	return EMPTY
+	return EmptyText
 }
 
 // EqualsIgnoreCase compares two strings for equality, ignoring case.
