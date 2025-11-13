@@ -1,11 +1,13 @@
 package cli
 
 import (
-	"github.com/toobprojects/go-commons/logs"
-	"github.com/toobprojects/go-commons/text"
+	"fmt"
 	"os"
 	"os/exec"
 	"strings"
+
+	"github.com/toobprojects/go-commons/logs"
+	"github.com/toobprojects/go-commons/text"
 )
 
 const (
@@ -44,8 +46,7 @@ func execCommand(command string, commandArgs []string, targetPath string, return
 	if returnOutput {
 		result, err := cmd.CombinedOutput()
 		if err != nil {
-			logs.Error.Printf("Command failed: %s %v\nError: %v\nOutput:\n%s", command, commandArgs, err, string(result))
-			//logs.Error.Printf("Error for command [ %v ] with options : %v", command, commandArgs)
+			logs.Error(fmt.Sprintf("Command failed: %s %v Error: %v Output: %s", command, commandArgs, err, string(result)))
 		}
 
 		responseOutput = string(result)
@@ -56,7 +57,7 @@ func execCommand(command string, commandArgs []string, targetPath string, return
 		cmd.Stderr = os.Stderr
 		err := cmd.Run()
 		if err != nil {
-			logs.Error.Printf(CommandErrorTag, err)
+			logs.Error(fmt.Sprintf(CommandErrorTag, err))
 			return text.EMPTY
 		}
 	}
@@ -66,5 +67,5 @@ func execCommand(command string, commandArgs []string, targetPath string, return
 
 func logNativeCommand(command string, commandArgs []string) {
 	result := strings.Join(commandArgs, text.WHITE_SPACE)
-	logs.Info.Printf("Running Native Command : %v %v", command, result)
+	logs.Info(fmt.Sprintf("Running Native Command : %v %v", command, result))
 }

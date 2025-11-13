@@ -18,7 +18,7 @@ func ReadContent(pathArg string) string {
 
 	content, err := os.ReadFile(pathArg)
 	if err != nil {
-		logs.Error.Fatal("Could not open file : ", err)
+		logs.Error(fmt.Sprintf("Could not open file : %v", err))
 	}
 
 	return string(content)
@@ -49,7 +49,8 @@ func List(directory string) []os.FileInfo {
 	// Try open the directory
 	file, err := os.Open(directory)
 	if err != nil {
-		logs.Error.Fatal(err)
+		logs.Error(fmt.Sprintf("Could not list directory %s: %v", directory, err))
+		return nil
 	}
 
 	defer file.Close()
@@ -58,7 +59,8 @@ func List(directory string) []os.FileInfo {
 	// This will give you a list of FileInfo records that you can use to see info of each file
 	list, err := file.Readdir(-1)
 	if err != nil {
-		logs.Error.Fatal(err)
+		logs.Error(fmt.Sprintf("Could not list directory %s: %v", directory, err))
+		return nil
 	}
 
 	return list
@@ -67,7 +69,7 @@ func List(directory string) []os.FileInfo {
 func ListByWildcard(directory string, suffix string) []string {
 	matches, err := filepath.Glob(filepath.Join(directory, suffix))
 	if err != nil {
-		logs.Error.Fatalf("Could not list directory : %v", directory)
+		logs.Error(fmt.Sprintf("Could not list directory : %v", directory))
 	}
 
 	return matches
@@ -82,7 +84,7 @@ func RemoveAllFromDirectory(directory string) {
 		fullLogFilePath := directory + "/" + file.Name()
 		err := os.Remove(fullLogFilePath)
 		if err != nil {
-			logs.Error.Fatalf("Could not delete file : [ v% ]", err)
+			logs.Error(fmt.Sprintf("Could not delete file : %v", err))
 		}
 	}
 }
@@ -120,7 +122,7 @@ func ExtractFolderNameFromPath(path string) string {
 func Move(source string, destination string) {
 	err := os.Rename(source, destination)
 	if err != nil {
-		logs.Error.Fatal(err)
+		logs.Error(fmt.Sprintf("Could not move file from %s to %s: %v", source, destination, err))
 	}
 }
 
@@ -132,7 +134,7 @@ func Copy(source string, destination string) {
 	// Open the file now and get its contents.
 	sourceFile, err := os.Open(source)
 	if err != nil {
-		logs.Error.Fatal(err)
+		logs.Error(fmt.Sprintf("Could not open source file %s: %v", source, err))
 	}
 
 	// Defer the CLOSE until we are done, and we can do this as the last line in the function before the return
@@ -141,7 +143,7 @@ func Copy(source string, destination string) {
 	// Create a new file in the destination path and get it ready for receiving contents.
 	destinationFile, err := os.Create(destination)
 	if err != nil {
-		logs.Error.Fatal(err)
+		logs.Error(fmt.Sprintf("Could not create destination file %s: %v", destination, err))
 	}
 
 	// Defer the CLOSE until we are done, and we can do this as the last line in the function before the return
@@ -151,15 +153,14 @@ func Copy(source string, destination string) {
 	_, err = io.Copy(destinationFile, sourceFile)
 
 	if err != nil {
-		logs.Error.Fatal(err)
+		logs.Error(fmt.Sprintf("Error copying from %s to %s: %v", source, destination, err))
 	}
 }
 
 func Pwd() string {
 	pwd, err := os.Getwd()
 	if err != nil {
-		logs.Error.Fatal(err)
-		os.Exit(1)
+		logs.Error(fmt.Sprintf("Error getting current working directory: %v", err))
 	}
 	return pwd
 }
@@ -169,7 +170,7 @@ func Pwd() string {
 func HomePath() string {
 	home, err := os.UserHomeDir()
 	if err != nil {
-		logs.Error.Fatal("Error getting file information:", err)
+		logs.Error(fmt.Sprintf("Error getting home directory: %v", err))
 	}
 
 	return home
@@ -181,7 +182,7 @@ func isSymbolicLink(path string) bool {
 	// Get file information
 	fileInfo, err := os.Lstat(path)
 	if err != nil {
-		logs.Error.Fatal("Error getting file information:", err)
+		logs.Error(fmt.Sprintf("Error getting file information for path %s: %v", path, err))
 	}
 
 	// Check if the file is a symbolic link
