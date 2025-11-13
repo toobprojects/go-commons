@@ -12,6 +12,7 @@ type Config struct {
 	Level slog.Leveler // slog.LevelDebug, slog.LevelInfo, etc.
 	JSON  bool         // true = JSON handler, false = human-readable text
 	Out   io.Writer    // usually os.Stdout or os.Stderr
+	Color bool         // enable ANSI colors in text mode (ignored for JSON)
 }
 
 var (
@@ -22,8 +23,60 @@ var (
 		Level: slog.LevelInfo,
 		JSON:  false,
 		Out:   os.Stdout,
+		Color: false,
 	}
 )
+
+const (
+	colorReset  = "\033[0m"
+	colorRed    = "\033[31m"
+	colorYellow = "\033[33m"
+	colorGreen  = "\033[32m"
+	colorBlue   = "\033[34m"
+)
+
+// colorHandler wraps another slog.Handler and injects ANSI color
+// codes into the log message based on the log level.
+//
+// This is only used when Config.Color is true and JSON is false.
+type colorHandler struct {
+	h slog.Handler
+}
+
+func (c *colorHandler) Enabled(ctx context.Context, level slog.Level) bool {
+	return c.h.Enabled(ctx, level)
+}
+
+func (c *colorHandler) Handle(ctx context.Context, r slog.Record) error {
+	// Work on a copy of the record so we don't mutate the original.
+	rec := r.Clone()
+
+	var color string
+	switch {
+	case rec.Level >= slog.LevelError:
+		color = colorRed
+	case rec.Level >= slog.LevelWarn:
+		color = colorYellow
+	case rec.Level >= slog.LevelInfo:
+		color = colorGreen
+	default:
+		color = colorBlue
+	}
+
+	if color != "" {
+		rec.Message = color + rec.Message + colorReset
+	}
+
+	return c.h.Handle(ctx, rec)
+}
+
+func (c *colorHandler) WithAttrs(attrs []slog.Attr) slog.Handler {
+	return &colorHandler{h: c.h.WithAttrs(attrs)}
+}
+
+func (c *colorHandler) WithGroup(name string) slog.Handler {
+	return &colorHandler{h: c.h.WithGroup(name)}
+}
 
 func SetLogFile(path string) error {
 	f, err := os.OpenFile(path, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0o644)
@@ -55,7 +108,12 @@ func Init(cfg Config) {
 	if cfg.JSON {
 		h = slog.NewJSONHandler(cfg.Out, &slog.HandlerOptions{Level: cfg.Level})
 	} else {
-		h = slog.NewTextHandler(cfg.Out, &slog.HandlerOptions{Level: cfg.Level})
+		base := slog.NewTextHandler(cfg.Out, &slog.HandlerOptions{Level: cfg.Level})
+		if cfg.Color {
+			h = &colorHandler{h: base}
+		} else {
+			h = base
+		}
 	}
 
 	l := slog.New(h)
