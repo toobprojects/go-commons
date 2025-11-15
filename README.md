@@ -1,4 +1,4 @@
-# 🚀 Go Commons
+# 🚀 Go Commons (TOOB Projects)
 
 A reusable, production-ready toolkit of **Go utilities** for everyday development.  
 It eliminates boilerplate, enforces consistency, and gives you clean, battle-tested helpers for CLI tools, services, and automation scripts.
