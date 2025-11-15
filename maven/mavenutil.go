@@ -48,7 +48,7 @@ func Run(targetPath string, mavenOptions string, captureCmdOutput bool, logFileP
 		mavenCliFlags = append(mavenCliFlags, SkipTests)
 	}
 
-	if text.StringNotBlank(logFilePath) {
+	if text.NotBlank(logFilePath) {
 		mavenCliFlags = append(mavenCliFlags, "-log-file="+logFilePath)
 	}
 
@@ -88,7 +88,7 @@ func SpotlessApplyLogFile(targetPath string, logFile string, captureCmdOutput bo
 }
 
 func BuildFailed(buildResponse string) bool {
-	return text.StringNotBlank(buildResponse) &&
+	return text.NotBlank(buildResponse) &&
 		strings.Contains(buildResponse, "BUILD FAILURE")
 }
 

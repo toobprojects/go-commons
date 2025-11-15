@@ -9,9 +9,9 @@ import (
 	"github.com/toobprojects/go-commons/logs"
 )
 
-// ReadContent
+// Read
 // Used to read file content, this will also convert the read bytes to String.
-func ReadContent(pathArg string) string {
+func Read(pathArg string) string {
 	if isSymbolicLink(pathArg) {
 		pathArg, _ = os.Readlink(pathArg)
 	}

@@ -4,15 +4,15 @@ import (
 	"strings"
 )
 
-// StringBlank reports whether the string contains only whitespace characters.
+// Blank reports whether the string contains only whitespace characters.
 // It treats an empty string as blank.
-func StringBlank(s string) bool {
+func Blank(s string) bool {
 	return len(strings.TrimSpace(s)) == 0
 }
 
-// StringNotBlank is the negation of StringBlank.
-func StringNotBlank(s string) bool {
-	return !StringBlank(s)
+// NotBlank is the negation of Blank.
+func NotBlank(s string) bool {
+	return !Blank(s)
 }
 
 // ListContains reports whether any element in the slice contains arg as a substring.
