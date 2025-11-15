@@ -1,98 +1,58 @@
-# [](https://)TOOB - ( Go Lang ) Commons
+```markdown
+# 🚀 Go Commons
 
-This Go module is a collection of various operations. <br/>
-The idea is to have a centralized module that has all the commons operations you may need when working on a Go project _(  CLI tool, Web Application ... )_ <br/><br/>
-This includes operations for :
+A reusable, production-ready toolkit of **Go utilities** for everyday development.  
+It eliminates boilerplate, enforces consistency, and gives you clean, battle-tested helpers for CLI tools, services, and automation scripts.
 
-* File IO operations.
-* Command Line Runner
-* Maven
-* Text / String
-  <br/>
-  <br/>
+---
 
-## TECH STACK
+# ✨ Overview
 
-The technology stack used in the project is :
+**Go Commons** wraps the Go standard library with *ergonomic*, *predictable*, and *developer-friendly* utilities.  
+Think of it as your “daily-driver toolbox” — simple, lightweight, and practical.
 
-* Golang 1.22.x
-* You can use any IDE of your choice.
+### 🔧 Included Capabilities
 
-<br/>
-<br/>
+- 📁 **File I/O** — read/write, copy, append, directory helpers, symlinks, path checks  
+- 📝 **Config Parsing** — JSON / YAML decoding with strict mode + env variable expansion  
+- ⚙️ **CLI Execution** — run native commands with context, working dir, env overrides, logged output  
+- 📊 **Structured Logging** — slog-based logger (JSON or colorized text) with global init + helpers  
+- ✂️ **Text Helpers** — blank checks, comparisons, argument lookup, delimiter block extraction  
 
-## SETTING UP
+Everything follows a consistent design philosophy:  
+**small, no-nonsense helpers that behave the way you expect.**
 
-You have a choice of checking this repo out and using the Go Workspaces feature. <br/>
-Or you can pull this module directly into your projects using :
+---
 
-```go
-go get github.com/tlmatjuda/toob-commons
-```
+# 🧱 Tech Stack
 
-<br/>
-<br/>
+- **Go:** 1.25.x  
+- **Primary dependency:** `gopkg.in/yaml.v3` (YAML parsing)
 
-## USAGE / EXAPMLES
+Zero heavy dependencies. Zero magic. Just clean utilities.
 
-### CLI
+---
 
-When you are inside your Go module and you need to execute a native commands on the respective Windows or Unix based OS. <br/>
-The `bool` is for when you want to capture the command output into a string when set to `true` otherwise it will log out to console as normal.
+# 📦 Packages & Documentation
 
-```go
-// Defintion
-cli.Exec(command string, commandArgs []string, targetPath string, returnOutput bool) string {}
+| Package | Description                                                                         | Documentation                      |
+| ------- | ----------------------------------------------------------------------------------- | ---------------------------------- |
+| ⚙️ CLI     | Execute native system commands with flexible options (cwd, env, output, logging)   | [docs/cli.md](./docs/cli.md)       |
+| 📁 File IO | Read/write, copy, append, paths, symlinks, config parsing (JSON/YAML)             | [docs/fileio.md](./docs/fileio.md) |
+| 📊 Logs    | Structured logging on top of slog (JSON or colorized text output)                 | [docs/logs.md](./docs/logs.md)     |
+| ✂️ Text    | String utilities: blank checks, comparisons, list search, arg parsing, delimiters | [docs/text.md](./docs/text.md)     |
 
-// Example
-cli.Exec("mvn", "clean install", "/project/folder/with/pom.xml", false)
-```
+> **Note:** `machine` and `maven` packages are intentionally excluded from documentation for now.
 
-<br/>
+---
 
-### File IO
+# 🧭 Philosophy
 
-The File IO Operations include :
+- Keep things **small**, **simple**, and **explicit**  
+- Provide consistent behavior across utilities  
+- Wrap the standard library without hiding it  
+- Handle errors clearly with helpful context  
 
-```go
-// Defintion
-// Exists
-// Checks if a given file Exists on the file system
-fileio.Exists(path string) (bool, error) {}
-
-
-// Example
-fileio.Exists("/path/of/the/file.txt")
-```
-
-<br/>
-
-### Text
-
-The Text / String Operations include :
-
-```go
-// StringBlank
-// Strempty checks whether string contains only whitespace or not
-text.StringBlank(s string) bool {}
-
-
-// Example
-text.StringBlank("Thabo Matjuda")
-
-// OR
-
-text.StringBlank(" ")
+Use **Go Commons** to accelerate CLI development, config-driven scripts, microservices, or any internal tooling where consistency matters.
 
 ```
-
-<br/>
-
-## CONCLUSION
-
-That's all. These are the operations I found important when building a few CLI tools with Go lang. <br/>
-I will be adding more as we go.
-
-<br/>
-</br
-><br/>
