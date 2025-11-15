@@ -1,4 +1,3 @@
-```markdown
 # 🚀 Go Commons
 
 A reusable, production-ready toolkit of **Go utilities** for everyday development.  
@@ -54,5 +53,3 @@ Zero heavy dependencies. Zero magic. Just clean utilities.
 - Handle errors clearly with helpful context  
 
 Use **Go Commons** to accelerate CLI development, config-driven scripts, microservices, or any internal tooling where consistency matters.
-
-```
