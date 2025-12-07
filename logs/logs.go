@@ -18,7 +18,6 @@ type Config struct {
 var (
 	mu         sync.RWMutex
 	logger     *slog.Logger
-	once       sync.Once
 	defaultCfg = Config{
 		Level: slog.LevelInfo,
 		JSON:  false,
@@ -133,12 +132,18 @@ func Init(cfg Config) {
 
 // get returns the current global logger, lazily initialized.
 func get() *slog.Logger {
-	once.Do(func() {
-		Init(defaultCfg)
-	})
 	mu.RLock()
-	defer mu.RUnlock()
-	return logger
+	l := logger
+	mu.RUnlock()
+
+	if l == nil {
+		Init(defaultCfg)
+		mu.RLock()
+		l = logger
+		mu.RUnlock()
+	}
+
+	return l
 }
 
 // With returns a new logger with additional attributes.
