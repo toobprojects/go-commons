@@ -25,6 +25,8 @@ var (
 		Out:   os.Stdout,
 		Color: false,
 	}
+	// currentCfg holds the last active config (initialized by Init).
+	currentCfg = Config{}
 )
 
 const (
@@ -84,12 +86,16 @@ func SetLogFile(path string) error {
 		return err
 	}
 
-	// Reinitialize logger using default config but override output
-	Init(Config{
-		Level: defaultCfg.Level,
-		JSON:  defaultCfg.JSON,
-		Out:   f,
-	})
+	// Use the last active config if available, otherwise fall back to defaultCfg.
+	cfg := currentCfg
+	// If currentCfg is zero (not initialized), use defaultCfg.
+	if cfg.Out == nil && cfg.Level == nil {
+		cfg = defaultCfg
+	}
+	cfg.Out = f
+
+	// Reinitialize logger using the preserved config but with new output.
+	Init(cfg)
 
 	return nil
 }
@@ -120,6 +126,8 @@ func Init(cfg Config) {
 
 	mu.Lock()
 	logger = l
+	// Remember the active config for future SetLogFile calls
+	currentCfg = cfg
 	mu.Unlock()
 }
 
